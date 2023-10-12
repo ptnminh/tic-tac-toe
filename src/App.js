@@ -45,6 +45,10 @@ function TicTacToeApp() {
   }
 
   function jumpTo(nextMove) {
+    if (nextMove === 0) {
+      // If going to game start, reset the history
+      setHistory([Array(9).fill(null)]);
+    }
     setCurrentMove(nextMove);
   }
 
@@ -80,10 +84,15 @@ function TicTacToeApp() {
   const sortedMoves = isDescending ? moves : moves.slice().reverse();
 
   const winnerSquares = calculateWinner(currentSquares);
-  const status = winnerSquares
-    ? "Winner: " + currentSquares[winnerSquares[0]]
-    : "Next player: " + (xIsNext ? "X" : "O");
+  let status;
 
+  if (winnerSquares) {
+    status = "Winner: " + currentSquares[winnerSquares[0]];
+  } else if (currentSquares.every((square) => square !== null)) {
+    status = "It's a draw!";
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
   function toggleSortOrder() {
     setIsDescending(!isDescending);
   }
